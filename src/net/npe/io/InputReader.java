@@ -3,10 +3,13 @@
  * 
  * Copyright (c) 2015 Kenji Sasaki
  * Released under the MIT license.
- * https://github.com/npedotnet/npe-library/blob/master/LICENSE
+ * https://github.com/npedotnet/npe-base/blob/master/LICENSE
  * 
- * This file is a part of npe-library.
- * https://github.com/npedotnet/npe-library
+ * This file is a part of npe-base.
+ * https://github.com/npedotnet/npe-base
+ *
+ * For more details, see npe-base wiki.
+ * https://github.com/npedotnet/npe-base/wiki
  * 
  */
 
@@ -109,6 +112,18 @@ public abstract class InputReader {
 	 */
 	public void skip(int numberOfBytes) throws IOException {
 		for(int i=0; i<numberOfBytes; i++) read();
+	}
+	
+	public void read(byte [] buffer, int offset, int length) throws IOException {
+		for(int i=0; i<length; i++) buffer[offset+i] = (byte)read();
+	}
+	
+	public void read(byte [] buffer, int offset) throws IOException {
+		read(buffer, offset, buffer.length);
+	}
+	
+	public void read(byte [] buffer) throws IOException {
+		read(buffer, 0, buffer.length);
 	}
 	
 	/**
@@ -266,6 +281,14 @@ public abstract class InputReader {
 	 */
 	public double readLittleEndianDouble() throws IOException {
 		return LittleEndian.readDouble(read(), read(), read(), read(), read(), read(), read(), read());
+	}
+	
+	public ByteOrderReader getByteOrder() {
+		return endian;
+	}
+	
+	public void setByteOrder(ByteOrderReader endian) {
+		this.endian = endian;
 	}
 	
 	protected ByteOrderReader endian;
