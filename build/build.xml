@@ -6,25 +6,30 @@
 	<property name="src" value="../src"/>
 	<property name="dest" value="dest"/>
 	<property name="jarfile" value="${ant.project.name}-${version}.jar"/>
+	<property name="srcjarfile" value="${ant.project.name}-${version}-sources.jar"/>
 	
-	<target name="all" depends="compile">
+	<target name="all" depends="jar,sources"/>
+	
+	<target name="sources">
+		<jar jarfile="${srcjarfile}" basedir="${src}"/>
+	</target>
+	
+	<target name="jar" depends="compile">
 		<jar jarfile="${jarfile}" basedir="${dest}"/>
 	</target>
 	
 	<target name="compile" depends="preprocess">
-		<javac srcdir="${dest}" destdir="${dest}" includeantruntime="false"/>
+		<javac srcdir="${src}" destdir="${dest}" includeantruntime="false"/>
 	</target>
 	
 	<target name="preprocess">
 		<mkdir dir="${dest}"/>
-		<copy todir="${dest}">
-			<fileset dir="${src}"/>
-		</copy>
 	</target>
 	
 	<target name="clean">
 		<delete dir="${dest}"/>
 		<delete file="${jarfile}"/>
+		<delete file="${srcjarfile}"/>
 	</target>
 
 </project>
